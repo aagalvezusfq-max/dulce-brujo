@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Dulce Brujo — Taller Cursor × Supabase</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500&family=Outfit:wght@300;400;500&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --ink: #0c0907;
+      --panel: #16110d;
+      --gold: #c4a574;
+      --cream: #f4ead8;
+      --mute: rgba(244, 234, 216, 0.62);
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html, body { height: 100%; background: var(--ink); color: var(--cream); font-family: Outfit, sans-serif; }
+    body { overflow: hidden; }
+    .deck { height: 100%; }
+    .slide {
+      display: none;
+      height: 100%;
+      padding: 7vh 8vw;
+      flex-direction: column;
+      justify-content: center;
+      background:
+        radial-gradient(ellipse at 50% 0%, rgba(196,165,116,0.12), transparent 55%),
+        var(--ink);
+    }
+    .slide.on { display: flex; }
+    .kicker {
+      font-size: 12px;
+      letter-spacing: 0.38em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 1.1rem;
+    }
+    h1, h2 { font-family: "Cormorant Garamond", serif; font-weight: 500; line-height: 0.95; }
+    h1 { font-size: clamp(3.4rem, 8vw, 7rem); font-style: italic; }
+    h2 { font-size: clamp(2.2rem, 5vw, 4.2rem); margin-bottom: 1.4rem; }
+    p, li { font-weight: 300; font-size: clamp(1.05rem, 2vw, 1.35rem); line-height: 1.55; color: var(--mute); }
+    .lead { max-width: 38rem; color: var(--cream); }
+    .rule { width: 3.5rem; height: 1px; background: rgba(196,165,116,0.7); margin: 1.4rem 0; }
+    .grid { display: grid; gap: 1.2rem; }
+    .cols-2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .cols-3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+    .card {
+      background: var(--panel);
+      border: 1px solid rgba(196,165,116,0.18);
+      padding: 1.3rem 1.4rem;
+    }
+    .card strong { display: block; color: var(--cream); font-weight: 500; margin-bottom: 0.35rem; }
+    .card em { color: var(--gold); font-style: normal; font-size: 0.78rem; letter-spacing: 0.14em; text-transform: uppercase; }
+    .flow {
+      display: flex;
+      align-items: center;
+      gap: 0.8rem;
+      flex-wrap: wrap;
+      margin: 1.2rem 0 1.6rem;
+    }
+    .pill {
+      border: 1px solid rgba(196,165,116,0.35);
+      padding: 0.7rem 1rem;
+      color: var(--cream);
+      font-size: 1rem;
+    }
+    .arrow { color: var(--gold); }
+    table { width: 100%; border-collapse: collapse; margin-top: 0.6rem; }
+    th, td { text-align: left; padding: 0.7rem 0.4rem; border-bottom: 1px solid rgba(196,165,116,0.16); font-size: 1.05rem; }
+    th { color: var(--gold); font-weight: 400; letter-spacing: 0.08em; text-transform: uppercase; font-size: 0.78rem; }
+    td { color: var(--cream); font-weight: 300; }
+    ol { padding-left: 1.2rem; }
+    ol li { margin: 0.45rem 0; }
+    .foot {
+      position: fixed;
+      left: 8vw;
+      right: 8vw;
+      bottom: 1.4rem;
+      display: flex;
+      justify-content: space-between;
+      color: rgba(196,165,116,0.7);
+      font-size: 0.78rem;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+    }
+    .hint { opacity: 0.7; }
+    @media (max-width: 800px) {
+      .cols-2, .cols-3 { grid-template-columns: 1fr; }
+      .slide { padding: 8vh 6vw; }
+    }
+  </style>
+</head>
+<body>
+  <main class="deck" id="deck">
+    <section class="slide on">
+      <p class="kicker">Taller Cursor × Supabase · USFQ</p>
+      <h1>Dulce Brujo</h1>
+      <div class="rule"></div>
+      <p class="lead">Tienda de cacao ficticio. Medusa v2, Next.js y Supabase solo como Postgres.</p>
+      <p style="margin-top:1.2rem;color:var(--gold)">aagalvez</p>
+    </section>
+
+    <section class="slide">
+      <p class="kicker">01 · Qué se entrega</p>
+      <h2>Una tienda que cierra el ciclo</h2>
+      <div class="grid cols-3">
+        <div class="card"><em>Identidad</em><strong>Dulce Brujo</strong><p>Catálogo propio, no el seed de Medusa.</p></div>
+        <div class="card"><em>Región</em><strong>/ec en dólares</strong><p>/dk sigue vivo en euros.</p></div>
+        <div class="card"><em>Evidencia</em><strong>Orden en Postgres</strong><p>La compra escribe la tabla order.</p></div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <p class="kicker">02 · Arquitectura</p>
+      <h2>Tres capas, un solo dueño de datos</h2>
+      <div class="flow">
+        <span class="pill">Storefront Next.js :8000</span>
+        <span class="arrow">→</span>
+        <span class="pill">Medusa v2 :9000</span>
+        <span class="arrow">→</span>
+        <span class="pill">Supabase Postgres :5432</span>
+      </div>
+      <p class="lead">El front habla con Medusa (`@medusajs/js-sdk`). Medusa es quien crea carritos, cobra y escribe órdenes. Supabase no es la app: es la base.</p>
+    </section>
+
+    <section class="slide">
+      <p class="kicker">03 · Decisión clave</p>
+      <h2>Por qué no usamos supabase-js</h2>
+      <div class="grid cols-2">
+        <div class="card">
+          <strong>Lo que Medusa ya resuelve</strong>
+          <p>Auth, carrito, inventario, checkout, regiones y órdenes. Duplicarlo en el front rompería el flujo.</p>
+        </div>
+        <div class="card">
+          <strong>Lo que pide el taller</strong>
+          <p>Supabase = Postgres. Sin Auth, RLS, Realtime ni cliente JS. La rúbrica lo penaliza.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <p class="kicker">04 · Conexión</p>
+      <h2>Tres URIs, una sola correcta</h2>
+      <table>
+        <thead><tr><th>Modo</th><th>Puerto</th><th>Uso</th></tr></thead>
+        <tbody>
+          <tr><td>Direct</td><td>5432 · db.&lt;ref&gt;</td><td>No. Suele fallar por IPv6.</td></tr>
+          <tr><td>Session pooler</td><td>5432 · pooler</td><td>Sí. App y migraciones.</td></tr>
+          <tr><td>Transaction pooler</td><td>6543 · pooler</td><td>No. Rompe migraciones.</td></tr>
+        </tbody>
+      </table>
+      <p style="margin-top:1.2rem">REDIS_URL no se deja vacío: se elimina. SSL con rejectUnauthorized false.</p>
+    </section>
+
+    <section class="slide">
+      <p class="kicker">05 · Región</p>
+      <h2>Ecuador cobra en dólares</h2>
+      <div class="grid cols-2">
+        <div class="card"><em>/ec</em><strong>USD + envío $10</strong><p>Región Ecuador, bodega Quito, fallback del middleware en ec.</p></div>
+        <div class="card"><em>/dk</em><strong>EUR intacto</strong><p>El seed europeo se deja a propósito para contrastar.</p></div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <p class="kicker">06 · Catálogo</p>
+      <h2>Tres dulces inventados</h2>
+      <table>
+        <thead><tr><th>Producto</th><th>USD / EUR</th><th>Handle</th></tr></thead>
+        <tbody>
+          <tr><td>Barra Dulzor Eclipse</td><td>$6.50 / €6.50</td><td>barra-eclipse-72</td></tr>
+          <tr><td>Nibs Caramelo Relámpago</td><td>$5.00 / €5.00</td><td>nibs-relampago</td></tr>
+          <tr><td>Trufas Azúcar Invisible</td><td>$12.00 / €12.00</td><td>trufas-rio-invisible</td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section class="slide">
+      <p class="kicker">07 · Demo en vivo</p>
+      <h2>Comprar y señalar la fila</h2>
+      <ol>
+        <li>Supabase → Table Editor → tablas product, region, order.</li>
+        <li>Tienda /ec: comprar Barra Dulzor Eclipse (pago manual, envío $10).</li>
+        <li>Refrescar order: aparece display_id nuevo, currency usd.</li>
+        <li>Admin → Orders: el mismo # y el mismo total.</li>
+        <li>Abrir /dk: los mismos dulces en euros.</li>
+      </ol>
+    </section>
+
+    <section class="slide">
+      <p class="kicker">08 · Evidencia ya corrida</p>
+      <h2>Orden #1, $16.50 USD</h2>
+      <div class="grid cols-2">
+        <div class="card"><strong>Tienda</strong><p>Barra Dulzor Eclipse + Standard $10. Confirmación en /ec/order/…</p></div>
+        <div class="card"><strong>Admin y Supabase</strong><p>Orders #1 · aagalvez@usfq.edu.ec · tabla order, id order_01M37GPCRPER9V6CF0G2DVD74C</p></div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <p class="kicker">Cierre</p>
+      <h1>Gracias</h1>
+      <div class="rule"></div>
+      <p class="lead">Preguntas: arquitectura, pooler o por qué el front no toca Supabase.</p>
+      <p style="margin-top:1.2rem;color:var(--gold)">Repo en GitHub · presentacion/index.html</p>
+    </section>
+  </main>
+  <div class="foot">
+    <span>Dulce Brujo</span>
+    <span class="hint">← → · F para pantalla completa</span>
+    <span id="count">1 / 10</span>
+  </div>
+  <script>
+    const slides = [...document.querySelectorAll(".slide")]
+    const count = document.getElementById("count")
+    let i = 0
+    function show(n) {
+      i = (n + slides.length) % slides.length
+      slides.forEach((s, idx) => s.classList.toggle("on", idx === i))
+      count.textContent = `${i + 1} / ${slides.length}`
+    }
+    document.addEventListener("keydown", (e) => {
+      if (["ArrowRight", "PageDown", " ", "Enter"].includes(e.key)) { e.preventDefault(); show(i + 1) }
+      if (["ArrowLeft", "PageUp", "Backspace"].includes(e.key)) { e.preventDefault(); show(i - 1) }
+      if (e.key === "f" || e.key === "F") document.documentElement.requestFullscreen?.()
+      if (e.key === "Home") show(0)
+      if (e.key === "End") show(slides.length - 1)
+    })
+    let touchX = null
+    document.addEventListener("touchstart", (e) => { touchX = e.changedTouches[0].screenX }, { passive: true })
+    document.addEventListener("touchend", (e) => {
+      if (touchX == null) return
+      const dx = e.changedTouches[0].screenX - touchX
+      if (dx < -40) show(i + 1)
+      if (dx > 40) show(i - 1)
+      touchX = null
+    })
+  </script>
+</body>
+</html>
