@@ -2,4 +2,4 @@
 
 Abrir `index.html` en el navegador. Flechas o espacio para avanzar. `F` para pantalla completa.
 
-No incluye contraseñas ni URI reales. La demo en vivo se hace con la tienda local y el Table Editor de Supabase.
+La diapositiva de accesos incluye los enlaces locales (tienda, carrito, Medusa) y el usuario de ejemplo `admin@test.com` / `supersecret`. No incluye la URI de Supabase.

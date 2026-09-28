@@ -166,6 +166,7 @@ export default async function seedCacao({ container }: ExecArgs) {
     await productModuleService.updateProducts(product.id, {
       title: catalog.title,
       description: catalog.description,
+      thumbnail: catalog.image,
       images: [{ url: catalog.image }],
       status: ProductStatus.PUBLISHED,
     })
@@ -198,6 +199,7 @@ export default async function seedCacao({ container }: ExecArgs) {
           weight: item.weight,
           status: ProductStatus.PUBLISHED,
           shipping_profile_id: shippingProfile.id,
+          thumbnail: item.image,
           images: [{ url: item.image }],
           options: [{ title: "Presentación", values: ["Unidad"] }],
           variants: [

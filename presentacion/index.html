@@ -73,6 +73,8 @@
     td { color: var(--cream); font-weight: 300; }
     ol { padding-left: 1.2rem; }
     ol li { margin: 0.45rem 0; }
+    a { color: var(--gold); text-decoration: none; }
+    a:hover { text-decoration: underline; }
     .foot {
       position: fixed;
       left: 8vw;
@@ -177,7 +179,17 @@
     </section>
 
     <section class="slide">
-      <p class="kicker">07 · Demo en vivo</p>
+      <p class="kicker">07 · Accesos</p>
+      <h2>Tienda, carrito y Medusa</h2>
+      <div class="grid cols-3">
+        <div class="card"><em>Tienda</em><strong><a href="http://localhost:8000/ec">localhost:8000/ec</a></strong><p>Catálogo Ecuador en dólares.</p></div>
+        <div class="card"><em>Carrito</em><strong><a href="http://localhost:8000/ec/cart">localhost:8000/ec/cart</a></strong><p>Carrito de la sesión actual.</p></div>
+        <div class="card"><em>Medusa</em><strong><a href="http://localhost:9000/app">localhost:9000/app</a></strong><p>admin@test.com<br>supersecret</p></div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <p class="kicker">08 · Demo en vivo</p>
       <h2>Comprar y señalar la fila</h2>
       <ol>
         <li>Supabase → Table Editor → tablas product, region, order.</li>
@@ -189,7 +201,7 @@
     </section>
 
     <section class="slide">
-      <p class="kicker">08 · Evidencia ya corrida</p>
+      <p class="kicker">09 · Evidencia ya corrida</p>
       <h2>Orden #1, $16.50 USD</h2>
       <div class="grid cols-2">
         <div class="card"><strong>Tienda</strong><p>Barra Dulzor Eclipse + Standard $10. Confirmación en /ec/order/…</p></div>
@@ -208,7 +220,7 @@
   <div class="foot">
     <span>Dulce Brujo</span>
     <span class="hint">← → · F para pantalla completa</span>
-    <span id="count">1 / 10</span>
+    <span id="count">1 / 11</span>
   </div>
   <script>
     const slides = [...document.querySelectorAll(".slide")]

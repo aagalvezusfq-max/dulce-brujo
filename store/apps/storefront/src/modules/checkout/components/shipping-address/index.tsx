@@ -7,6 +7,68 @@ import React, { useEffect, useMemo, useState } from "react"
 import AddressSelect from "../address-select"
 import CountrySelect from "../country-select"
 
+const demoShipping = {
+  first_name: "Cliente",
+  last_name: "Demo",
+  address_1: "Calle de los Dulces 72",
+  company: "Dulce Brujo",
+  postal_code: "170150",
+  city: "Quito",
+  province: "Pichincha",
+  phone: "0990000000",
+  email: "demo@dulcebrujo.local",
+}
+
+const countryForCart = (cart: HttpTypes.StoreCart | null) => {
+  const codes =
+    cart?.region?.countries
+      ?.map((country) => country.iso_2)
+      .filter((code): code is string => Boolean(code)) || []
+
+  if (codes.includes("ec")) {
+    return "ec"
+  }
+
+  return codes[0] || "ec"
+}
+
+const formFromCart = (
+  cart: HttpTypes.StoreCart | null,
+  customer: HttpTypes.StoreCustomer | null
+) => {
+  const address = cart?.shipping_address
+  const saved = Boolean(address?.address_1)
+
+  return {
+    "shipping_address.first_name": saved
+      ? address?.first_name || ""
+      : demoShipping.first_name,
+    "shipping_address.last_name": saved
+      ? address?.last_name || ""
+      : demoShipping.last_name,
+    "shipping_address.address_1": saved
+      ? address?.address_1 || ""
+      : demoShipping.address_1,
+    "shipping_address.company": saved
+      ? address?.company || ""
+      : demoShipping.company,
+    "shipping_address.postal_code": saved
+      ? address?.postal_code || ""
+      : demoShipping.postal_code,
+    "shipping_address.city": saved ? address?.city || "" : demoShipping.city,
+    "shipping_address.country_code": saved
+      ? address?.country_code || ""
+      : countryForCart(cart),
+    "shipping_address.province": saved
+      ? address?.province || ""
+      : demoShipping.province,
+    "shipping_address.phone": saved
+      ? address?.phone || ""
+      : demoShipping.phone,
+    email: cart?.email || customer?.email || demoShipping.email,
+  }
+}
+
 const ShippingAddress = ({
   customer,
   cart,
@@ -18,18 +80,9 @@ const ShippingAddress = ({
   checked: boolean
   onChange: () => void
 }) => {
-  const [formData, setFormData] = useState<Record<string, string>>({
-    "shipping_address.first_name": cart?.shipping_address?.first_name || "",
-    "shipping_address.last_name": cart?.shipping_address?.last_name || "",
-    "shipping_address.address_1": cart?.shipping_address?.address_1 || "",
-    "shipping_address.company": cart?.shipping_address?.company || "",
-    "shipping_address.postal_code": cart?.shipping_address?.postal_code || "",
-    "shipping_address.city": cart?.shipping_address?.city || "",
-    "shipping_address.country_code": cart?.shipping_address?.country_code || "",
-    "shipping_address.province": cart?.shipping_address?.province || "",
-    "shipping_address.phone": cart?.shipping_address?.phone || "",
-    email: cart?.email || "",
-  })
+  const [formData, setFormData] = useState<Record<string, string>>(() =>
+    formFromCart(cart, customer)
+  )
 
   const countriesInRegion = useMemo(
     () => cart?.region?.countries?.map((c) => c.iso_2),
@@ -73,14 +126,12 @@ const ShippingAddress = ({
   }
 
   useEffect(() => {
-    // Ensure cart is not null and has a shipping_address before setting form data
-    if (cart && cart.shipping_address) {
-      setFormAddress(cart?.shipping_address, cart?.email)
+    if (cart?.shipping_address?.address_1) {
+      setFormAddress(cart.shipping_address, cart.email || customer?.email)
+      return
     }
 
-    if (cart && !cart.email && customer?.email) {
-      setFormAddress(undefined, customer.email)
-    }
+    setFormData(formFromCart(cart, customer))
   }, [cart]) // Add cart as a dependency
 
   const handleChange = (
