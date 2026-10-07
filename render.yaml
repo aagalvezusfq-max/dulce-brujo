@@ -1,0 +1,43 @@
+services:
+  - type: web
+    name: dulce-brujo-api
+    runtime: node
+    plan: free
+    rootDir: store/apps/backend
+    buildCommand: npm install --include=dev && npm run build
+    startCommand: npm start
+    healthCheckPath: /health
+    envVars:
+      - key: NODE_VERSION
+        value: "22"
+      - key: DATABASE_URL
+        sync: false
+      - key: JWT_SECRET
+        sync: false
+      - key: COOKIE_SECRET
+        sync: false
+      - key: STORE_CORS
+        value: https://dulce-brujo-tienda.onrender.com
+      - key: ADMIN_CORS
+        value: https://dulce-brujo-api.onrender.com
+      - key: AUTH_CORS
+        value: https://dulce-brujo-tienda.onrender.com,https://dulce-brujo-api.onrender.com
+
+  - type: web
+    name: dulce-brujo-tienda
+    runtime: node
+    plan: free
+    rootDir: store/apps/storefront
+    buildCommand: npm install --include=dev && npm run build
+    startCommand: npm start
+    envVars:
+      - key: NODE_VERSION
+        value: "22"
+      - key: NEXT_PUBLIC_DEFAULT_REGION
+        value: ec
+      - key: NEXT_PUBLIC_MEDUSA_BACKEND_URL
+        value: https://dulce-brujo-api.onrender.com
+      - key: NEXT_PUBLIC_BASE_URL
+        value: https://dulce-brujo-tienda.onrender.com
+      - key: NEXT_PUBLIC_MEDUSA_PUBLISHABLE_KEY
+        sync: false
