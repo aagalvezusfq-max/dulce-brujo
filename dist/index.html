@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Dulce Brujo</title>
+  <style>
+    :root {
+      --ink: #120e0c;
+      --cream: #f4e8d6;
+      --gold: #c4a574;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      min-height: 100vh;
+      background: var(--ink);
+      color: var(--cream);
+      font-family: Georgia, "Times New Roman", serif;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 2rem;
+    }
+    main { max-width: 36rem; }
+    p.kicker {
+      letter-spacing: 0.28em;
+      text-transform: uppercase;
+      font-family: system-ui, sans-serif;
+      font-size: 0.72rem;
+      color: var(--gold);
+      margin-bottom: 1rem;
+    }
+    h1 { font-size: clamp(3rem, 8vw, 5rem); font-weight: 500; font-style: italic; }
+    .rule { width: 3.5rem; height: 1px; background: var(--gold); margin: 1.2rem 0; }
+    p { font-family: system-ui, sans-serif; font-weight: 300; line-height: 1.6; }
+    ul { margin-top: 1.2rem; padding-left: 1.1rem; }
+    li { margin: 0.35rem 0; }
+  </style>
+</head>
+<body>
+  <main>
+    <p class="kicker">Tienda de cacao</p>
+    <h1>Dulce Brujo</h1>
+    <div class="rule"></div>
+    <p>Dulces de cacao inventados. La tienda de Ecuador cobra en dólares.</p>
+    <ul>
+      <li>Barra Dulzor Eclipse</li>
+      <li>Nibs Caramelo Relámpago</li>
+      <li>Trufas Azúcar Invisible</li>
+    </ul>
+  </main>
+</body>
+</html>
